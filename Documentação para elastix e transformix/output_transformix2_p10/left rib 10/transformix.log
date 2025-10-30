@@ -1,0 +1,86 @@
+
+transformix is started at Thu Jul 31 12:22:40 2025.
+
+which transformix:   transformix
+  transformix version: 5.1.0
+  Build date: Jun 22 2023 03:14:27
+  Compiler: GCC version 12.3.0
+  Memory address size: 64-bit
+  CMake version: 3.26.4
+  ITK version: 5.3.0
+
+Command-line arguments: 
+  -in "costela2_nii/left rib 10.nii.gz" -out "output_transformix2_p10/left rib 10" -tp output_elastix_p10/TransformParameters.0.txt -tp output_elastix_p10/TransformParameters.1.txt
+
+transformix runs at: DESKTOP-M4BA0VV
+  Linux 6.6.87.2-microsoft-standard-WSL2 (x64), #1 SMP PREEMPT_DYNAMIC Thu Jun  5 18:30:46 UTC 2025
+  with 3806 MB memory, and 4 cores @ 3110 MHz.
+Running transformix with parameter file "output_elastix_p10/TransformParameters.0.txt".
+
+Reading the elastix parameters from file ...
+
+Installing all components.
+InstallingComponents was successful.
+
+ELASTIX version: 5.1.0
+Command line options from ElastixBase:
+-in       costela2_nii/left rib 10.nii.gz
+-out      output_transformix2_p10/left rib 10/
+-threads  unspecified, so all available threads are used
+-tp       output_elastix_p10/TransformParameters.0.txt
+-def      unspecified, so no input points transformed
+-jac      unspecified, so no det(dT/dx) computed
+-jacmat   unspecified, so no dT/dx computed
+
+=============== start of ParameterFile: output_elastix_p10/TransformParameters.0.txt ===============
+(CenterOfRotationPoint -5.50286865234375 -26.466720581054688 53.65060329437256)
+(Direction 1 0 0 0 -1 0 0 0 1)
+(FixedImageDimension 3)
+(FixedInternalImagePixelType "float")
+(HowToCombineTransforms "Compose")
+(Index 0 0 0)
+(InitialTransformParametersFileName "NoInitialTransform")
+(MovingImageDimension 3)
+(MovingInternalImagePixelType "float")
+(NumberOfParameters 12)
+(Origin -179.81927490234375 147.8496856689453 -37.549400329589844)
+(Size 256 256 20)
+(Spacing 1.3671875 1.3671875 9.600000381469727)
+(Transform "AffineTransform")
+(TransformParameters 1.0020397511146408 -0.004181842267667724 0.007906151861738575 -0.008897534760531234 0.9730985831891077 -0.05310364262696004 -0.019964249906338914 0.0023163183264316156 0.908515426185013 5.248213964831335 -133.85989330138847 -266.24905260073007)
+(UseDirectionCosines "true")
+
+// ResampleInterpolator specific
+(FinalBSplineInterpolationOrder 3)
+(ResampleInterpolator "FinalBSplineInterpolator")
+
+// Resampler specific
+(CompressResultImage "false")
+(DefaultPixelValue 0)
+(Resampler "DefaultResampler")
+(ResultImageFormat "mhd")
+(ResultImagePixelType "short")
+
+
+=============== end of ParameterFile: output_elastix_p10/TransformParameters.0.txt ===============
+
+
+Reading input image ...
+  Reading input image took 0.042515 s
+Calling all ReadFromFile()'s ...
+  Calling all ReadFromFile()'s took 0.000251 s
+Transforming points ...
+  The command-line option "-def" is not used, so no points are transformed
+  Transforming points done, it took 0.00s
+Compute determinant of spatial Jacobian ...
+  The command-line option "-jac" is not used, so no det(dT/dx) computed.
+  Computing determinant of spatial Jacobian done, it took 0.00s
+Compute spatial Jacobian (full matrix) ...
+  The command-line option "-jacmat" is not used, so no dT/dx computed.
+  Computing spatial Jacobian done, it took 0.00s
+Resampling image and writing to disk ...
+  Resampling took 0.09s
+
+transformix has finished at Thu Jul 31 12:22:41 2025.
+Total time elapsed: 0.2s.
+

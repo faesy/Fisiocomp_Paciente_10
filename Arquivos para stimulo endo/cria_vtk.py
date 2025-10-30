@@ -12,11 +12,11 @@ BASE_DIR = Path(__file__).parent  # pasta do script
 
 SHIFT_TXT = BASE_DIR / "msh_icp_shift.txt"
 
-LV_STL_IN = BASE_DIR / "Patient_1-LVEndo.stl"
-RV_STL_IN = BASE_DIR / "Patient_1-RVEndo.stl"
+LV_STL_IN = BASE_DIR / "Patient_10-LVEndo.stl"
+RV_STL_IN = BASE_DIR / "Patient_10-RVEndo.stl"
 
-LV_VTK_OUT = BASE_DIR / "Patient_1-LVEndo_shifted.vtk"
-RV_VTK_OUT = BASE_DIR / "Patient_1-RVEndo_shifted.vtk"
+LV_VTK_OUT = BASE_DIR / "Patient_10-LVEndo_shifted.vtk"
+RV_VTK_OUT = BASE_DIR / "Patient_10-RVEndo_shifted.vtk"
 
 # escala aplicada aos STLs antes da translação
 STL_SCALE = 1000.0

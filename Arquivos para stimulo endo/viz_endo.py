@@ -22,8 +22,8 @@ from PyQt5.QtWidgets import (
 # =========================
 # ======== CONFIG =========
 # =========================
-ALG_PATH = "../Coração .Alg/Patient_1.alg"
-MSH_PATH = "../Arquivos para stimulo endo/Patient_1.msh" 
+ALG_PATH = "../Coração .Alg/Patient_10.alg"
+MSH_PATH = "../Arquivos para stimulo endo/Patient_10.msh" 
 
 SUBSAMPLE = 10
 MSH_SCALE = 1000.0  # <<<<< ULTIPLICADOR DAS COORDENADAS DO MSH

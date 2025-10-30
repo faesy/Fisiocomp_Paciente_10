@@ -14,32 +14,32 @@ from PyQt5.QtCore import Qt
 # ---------- Eletrodos de fallback (mm) ----------
 LEADS_AUTOMATICO_MM = np.array(
     [
-        [25455.1, -24790.8, 128147.5],  # V1
-        [63604.6, -25589.5, 121263.0],  # V2
-        [93223.7, -26570.4, 104170.7],  # V3
-        [119019.3, -25818.6, 84240.7],  # V4
-        [189466.4, 21790.6, 88558.1],  # V5
-        [221677.3, 89290.6, 95483.6],  # V6
-        [193603.4, 76137.2, 274150.0],  # LA
-        [176445.3, 18737.4, -107207.8],  # LL
-        [-77499.5, 2171.4, -98577.8],  # RL
-        [-99483.4, 73894.1, 274536.3],  # RA
+        [  35900.2,  -39037.7,   99772.7],   # V1
+        [  79459.0,  -42147.6,   92748.4],   # V2
+        [ 113324.9,  -48558.9,   75401.5],   # V3
+        [ 145174.7,  -48164.7,   53379.2],   # V4
+        [ 230705.3,      90.7,   48577.3],   # V5
+        [ 251077.1,   80079.2,   44780.7],   # V6
+        [ 217183.7,   80959.9,  245021.9],   # LA
+        [ 199930.5,   -2045.4, -155618.2],   # LL
+        [ -73016.6,  -15201.5, -142951.8],   # RL
+        [ -96524.4,   78643.6,  248436.8],   # RA
     ], dtype=np.float64
 )
 
 # Se quiser, substitua esse fallback pelos seus pontos manuais
 LEADS_REAL_MM = np.array(
     [
-        [ 28550.,  -25192., 121103.],  # V1
-        [ 73790.,  -25372., 121963.],  # V2
-        [104110.,  -25512., 103413.],  # V3
-        [131180.,  -20092.,  84203.],  # V4
-        [219310.,   80358.,  86233.],  # V5
-        [248180.,  118848.,  89693.],  # V6
-        [236530.,   67408., 179573.],  # LA
-        [186530.,   67408.,-420427.],  # LL
-        [ -88390.,   67408.,-420427.], # RL
-        [-138390.,   67408., 179573.], # RA
+        [ 23495.9,  -39902.0, 102186.7],   # V1
+        [ 70445.9,  -36252.0, 105506.7],   # V2
+        [101155.9,  -51742.0,  84626.7],   # V3
+        [133885.9,  -52752.0,  57266.7],   # V4
+        [224885.9,   81828.0,  46996.7],   # V5
+        [224905.9,  117308.0,  46756.7],   # V6
+        [219715.9,   16788.0, 175916.7],   # LA
+        [169715.9,   16788.0,-424083.3],   # LL
+        [ -68864.1,  16788.0,-424083.3],   # RL
+        [-118864.1,  16788.0, 175916.7],   # RA
     ], dtype=np.float64
 )
 
@@ -70,8 +70,8 @@ def load_electrodes_mm(path_txt: str | None, fallback_mm: np.ndarray) -> np.ndar
 class JanelaControle(QWidget):
     def __init__(
         self,
-        path_alg="Coração .Alg/Patient_1.alg",
-        path_coracao_movel="Segmentações/Segmentação Original/coração Abhi.vtp",
+        path_alg="Coração .Alg/Patient_10.alg",
+        path_coracao_movel="Segmentações/Segmentação Original/Coração Abhi.vtp",
         path_torso="Segmentações/Segmentação Original/torso.vtp",
         # Novos caminhos opcionais:
         path_eletrodos_manual_txt=None,   # .txt (mm) MANUAL
@@ -275,8 +275,8 @@ class JanelaControle(QWidget):
 if __name__ == "__main__":
     app = QApplication(sys.argv)
     janela = JanelaControle(
-        path_alg="Coração .Alg/Patient_1.alg",
-        path_coracao_movel="Segmentações/Segmentação Original/coração Abhi.vtp",
+        path_alg="Coração .Alg/Patient_10.alg",
+        path_coracao_movel="Segmentações/Segmentação Original/Coração Abhi.vtp",
         path_torso="Segmentações/Segmentação Original/torso.vtp",
         # Preencha estes dois se tiver os arquivos .txt (em mm):
         path_eletrodos_manual_txt=None,    # ex: "leads_man.txt"
