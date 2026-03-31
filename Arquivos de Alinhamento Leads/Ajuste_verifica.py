@@ -14,32 +14,24 @@ from PyQt5.QtCore import Qt
 # ---------- Eletrodos de fallback (mm) ----------
 LEADS_AUTOMATICO_MM = np.array(
     [
-        [  35900.2,  -39037.7,   99772.7],   # V1
-        [  79459.0,  -42147.6,   92748.4],   # V2
-        [ 113324.9,  -48558.9,   75401.5],   # V3
-        [ 145174.7,  -48164.7,   53379.2],   # V4
-        [ 230705.3,      90.7,   48577.3],   # V5
-        [ 251077.1,   80079.2,   44780.7],   # V6
-        [ 217183.7,   80959.9,  245021.9],   # LA
-        [ 199930.5,   -2045.4, -155618.2],   # LL
-        [ -73016.6,  -15201.5, -142951.8],   # RL
-        [ -96524.4,   78643.6,  248436.8],   # RA
+    [ -19345.7, -159065.7,   71896.0],   # V1
+    [  24213.1, -162175.6,   64871.7],   # V2
+    [  58079.0, -168586.9,   47524.8],   # V3
+    [  89928.8, -168192.7,   25502.5],   # V4
+    [ 175459.4, -119937.3,   20700.6],   # V5
+    [ 195831.2,  -39948.8,   16904.0],   # V6
     ], dtype=np.float64
 )
 
 # Se quiser, substitua esse fallback pelos seus pontos manuais
 LEADS_REAL_MM = np.array(
     [
-        [ 23495.9,  -39902.0, 102186.7],   # V1
-        [ 70445.9,  -36252.0, 105506.7],   # V2
-        [101155.9,  -51742.0,  84626.7],   # V3
-        [133885.9,  -52752.0,  57266.7],   # V4
-        [224885.9,   81828.0,  46996.7],   # V5
-        [224905.9,  117308.0,  46756.7],   # V6
-        [219715.9,   16788.0, 175916.7],   # LA
-        [169715.9,   16788.0,-424083.3],   # LL
-        [ -68864.1,  16788.0,-424083.3],   # RL
-        [-118864.1,  16788.0, 175916.7],   # RA
+    [ -31750.0, -159930.0,  74310.0],   # V1
+    [  15200.0, -156280.0,  77630.0],   # V2
+    [  45910.0, -171770.0,  56750.0],   # V3
+    [  78640.0, -172780.0,  29390.0],   # V4
+    [ 169640.0,  -38200.0,  19120.0],   # V5
+    [ 169660.0,   -2720.0,  18880.0],   # V6
     ], dtype=np.float64
 )
 
@@ -71,7 +63,7 @@ class JanelaControle(QWidget):
     def __init__(
         self,
         path_alg="Coração .Alg/Patient_10.alg",
-        path_coracao_movel="Segmentações/Segmentação Original/Coração Abhi.vtp",
+        path_coracao_movel="Segmentações/Segmentação Original/coração Abhi.vtp",
         path_torso="Segmentações/Segmentação Original/torso.vtp",
         # Novos caminhos opcionais:
         path_eletrodos_manual_txt=None,   # .txt (mm) MANUAL
@@ -175,15 +167,9 @@ class JanelaControle(QWidget):
             self.malha_coracao.points = apply_T(self.malha_coracao_original.points, self.T)
             self.malha_torso.points = apply_T(self.malha_torso_original.points, self.T)
 
-            # --- 7) Calcula centro transformado do coração ---
-            R_mat = self.T[:3, :3]
-            t_vec = self.T[:3, 3]
-            centro_original = np.array(self.malha_coracao_original.center)
-            centro_transformado = (R_mat @ centro_original) + t_vec
-
-            # --- 8) Aplica rotação/translação em torno desse centro aos eletrodos (MANUAL e AUTO) ---
-            self.leads_manual_m = (R_mat @ (self.leads_manual_original_m - centro_transformado).T).T + centro_transformado
-            self.leads_auto_m   = (R_mat @ (self.leads_auto_original_m   - centro_transformado).T).T + centro_transformado
+            # --- 7/8) Aplica a MESMA T_4x4 nos eletrodos (MANUAL e AUTO) ---
+            self.leads_manual_m = apply_T(self.leads_manual_original_m, self.T)
+            self.leads_auto_m   = apply_T(self.leads_auto_original_m,   self.T)
 
             # --- 9) Plotagem ---
             self.plotter.add_mesh(
@@ -244,27 +230,32 @@ class JanelaControle(QWidget):
             pasta_out = "Arquivos de Alinhamento Leads"
             os.makedirs(pasta_out, exist_ok=True)
 
-            # --- salva eletrodos em mm ---
-            np.savetxt(
-                os.path.join(pasta_out, "leads_manual_transformados.txt"),
-                self.leads_manual_m * 1000.0,
-                fmt="%.6f",
-                header="Eletrodos REAIS transformados (mm): x y z",
-                comments=""
-            )
-            np.savetxt(
-                os.path.join(pasta_out, "leads_auto_transformados.txt"),
-                self.leads_auto_m * 1000.0,
-                fmt="%.6f",
-                header="Eletrodos AUTOMÁTICOS transformados (mm): x y z",
-                comments=""
-            )
+            # --- eletrodos em mm ---
+            manual_mm = self.leads_manual_m * 1000
+            auto_mm   = self.leads_auto_m * 1000
+
+            def format_array(arr):
+                linhas = []
+                for i, p in enumerate(arr):
+                    linhas.append(f"    [{p[0]: .6f}, {p[1]: .6f}, {p[2]: .6f}],  # V{i+1}")
+                return "\n".join(linhas)
+
+            # --- salva em formato Python (.py) ---
+            with open(os.path.join(pasta_out, "leads_manual_formatado.txt"), "w") as f:
+                f.write("# Eletrodos MANUAIS transformados (mm)\n[\n")
+                f.write(format_array(manual_mm))
+                f.write("\n]\n")
+
+            with open(os.path.join(pasta_out, "leads_auto_formatado.txt"), "w") as f:
+                f.write("# Eletrodos AUTOMÁTICOS transformados (mm)\n[\n")
+                f.write(format_array(auto_mm))
+                f.write("\n]\n")
 
             self.lbl_status.setText(
-                f"Arquivos salvos em '{pasta_out}': coracao_transformado.vtp, "
-                "torso_transformado.vtp, leads_manual_transformados.txt, leads_auto_transformados.txt"
+                f"Arquivos salvos em '{pasta_out}': leads_manual_formatado.py, leads_auto_formatado.py"
             )
             QMessageBox.information(self, "Salvar", f"Arquivos salvos em:\n{pasta_out}")
+
 
         except Exception as e:
             self.lbl_status.setText(f"Erro ao salvar: {e}")
@@ -276,7 +267,7 @@ if __name__ == "__main__":
     app = QApplication(sys.argv)
     janela = JanelaControle(
         path_alg="Coração .Alg/Patient_10.alg",
-        path_coracao_movel="Segmentações/Segmentação Original/Coração Abhi.vtp",
+        path_coracao_movel="Segmentações/Segmentação Original/coração Abhi.vtp",
         path_torso="Segmentações/Segmentação Original/torso.vtp",
         # Preencha estes dois se tiver os arquivos .txt (em mm):
         path_eletrodos_manual_txt=None,    # ex: "leads_man.txt"
